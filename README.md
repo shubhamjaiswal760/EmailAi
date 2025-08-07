@@ -127,54 +127,41 @@ npm start
 5. **Add Attachments**: Click "Add Files" to attach documents, images, or other files
 6. **Send Email**: Click "Send Email" to send to all recipients with attachments
 
-## Deployment to Vercel
+## Deployment Options
 
-### Prerequisites
+### Railway (Recommended)
 
-- Vercel account
-- Environment variables configured
+1. **Connect your GitHub repository to Railway**
+2. **Set environment variables in Railway dashboard:**
+   - `GROQ_API_KEY` (your Groq API key)
+   - `EMAIL_USER` (your Gmail address)
+   - `EMAIL_PASS` (your Gmail app password)
+3. **Deploy automatically**
 
-### Steps
+### Render
 
-1. **Install Vercel CLI:**
+1. **Connect your GitHub repository to Render**
+2. **Set build command:** `npm run build`
+3. **Set start command:** `cd backend && npm start`
+4. **Configure environment variables in Render dashboard**
 
-   ```bash
-   npm i -g vercel
+### Heroku
+
+1. **Connect your GitHub repository to Heroku**
+2. **Create a `Procfile` in the root directory:**
    ```
-
-2. **Login to Vercel:**
-
-   ```bash
-   vercel login
+   web: cd backend && npm start
    ```
+3. **Set environment variables in Heroku dashboard**
+4. **Deploy**
 
-3. **Deploy the application:**
+### DigitalOcean App Platform
 
-   ```bash
-   vercel
-   ```
-
-4. **Configure environment variables in Vercel dashboard:**
-
-   - Go to your Vercel project dashboard
-   - Navigate to Settings → Environment Variables
-   - Add these variables:
-     - `GROQ_API_KEY` (your Groq API key)
-     - `EMAIL_USER` (your Gmail address)
-     - `EMAIL_PASS` (your Gmail app password)
-
-5. **Redeploy after setting environment variables:**
-   ```bash
-   vercel --prod
-   ```
-
-### Environment Variables for Production
-
-Make sure to set these in your Vercel dashboard:
-
-- `GROQ_API_KEY`: Your Groq API key (get one at https://console.groq.com/)
-- `EMAIL_USER`: Your Gmail address
-- `EMAIL_PASS`: Your Gmail app password
+1. **Connect your GitHub repository to DigitalOcean**
+2. **Choose Node.js environment**
+3. **Set build command:** `npm run build`
+4. **Set start command:** `cd backend && npm start`
+5. **Configure environment variables**
 
 ## API Endpoints
 
@@ -212,7 +199,7 @@ Make sure to set these in your Vercel dashboard:
 │   ├── package.json       # Frontend dependencies
 │   ├── tailwind.config.js # Tailwind configuration
 │   └── postcss.config.js  # PostCSS configuration
-├── vercel.json            # Vercel deployment config
+
 └── README.md              # This file
 ```
 
