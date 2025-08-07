@@ -213,7 +213,7 @@ npm start
 
 ## License
 
-MIT License - feel free to use this project for your own purposes.
+Feel free to use this project for your own purposes.
 
 ## Support
 
