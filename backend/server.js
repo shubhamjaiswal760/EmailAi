@@ -60,12 +60,13 @@ app.post('/api/generate-email', async (req, res) => {
       return res.status(400).json({ error: 'Prompt is required' });
     }
 
-    const completion = await groq.chat.completions.create({
+    // First, generate a specific subject line based on the prompt
+    const subjectCompletion = await groq.chat.completions.create({
       model: "llama-3.3-70b-versatile",
       messages: [
         {
           role: "system",
-          content: "You are a professional email writer. Generate a well-structured, professional email based on the user's prompt. Create a specific, relevant subject line and a professional email body. Format the response as JSON with 'subject' and 'body' fields. The subject should be specific and relevant to the email content. The body should be a clean, professional email without any labels like 'Subject:' or 'Body:' - just the actual email content."
+          content: "You are a professional email subject line writer. Create a specific, relevant, and professional subject line based on the user's request. The subject should be concise (under 60 characters), specific to the email content, and appropriate for the context. Return only the subject line, nothing else."
         },
         {
           role: "user",
@@ -75,19 +76,30 @@ app.post('/api/generate-email', async (req, res) => {
       temperature: 0.7,
     });
 
-    const response = completion.choices[0].message.content;
-    
-    // Try to parse as JSON, if not, create a simple structure
-    let emailData;
-    try {
-      emailData = JSON.parse(response);
-    } catch (error) {
-      // If not JSON, create a simple structure
-      emailData = {
-        subject: "AI Generated Email",
-        body: response
-      };
-    }
+    const subject = subjectCompletion.choices[0].message.content.trim();
+
+    // Then, generate the email body
+    const bodyCompletion = await groq.chat.completions.create({
+      model: "llama-3.3-70b-versatile",
+      messages: [
+        {
+          role: "system",
+          content: "You are a professional email writer. Write a clean, professional email body based on the user's request. The email should be well-structured with proper greeting, clear content, and professional closing. Do not include any labels, formatting instructions, or extra text - just write the actual email content as it should appear in the email. Keep it concise but professional."
+        },
+        {
+          role: "user",
+          content: prompt
+        }
+      ],
+      temperature: 0.7,
+    });
+
+    const body = bodyCompletion.choices[0].message.content.trim();
+
+    const emailData = {
+      subject: subject,
+      body: body
+    };
 
     res.json({
       success: true,
@@ -122,7 +134,8 @@ app.post('/api/send-email', upload.array('attachments', 5), async (req, res) => 
       from: process.env.EMAIL_USER,
       to: recipientList.join(', '),
       subject: subject,
-      html: body.replace(/\n/g, '<br>'),
+      html: body.replace(/\n/g, '<br>').replace(/\r/g, ''),
+      text: body, // Also include plain text version
       attachments: attachments.map(file => ({
         filename: file.originalname,
         path: file.path
