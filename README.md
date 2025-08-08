@@ -127,42 +127,6 @@ npm start
 5. **Add Attachments**: Click "Add Files" to attach documents, images, or other files
 6. **Send Email**: Click "Send Email" to send to all recipients with attachments
 
-## Deployment Options
-
-### Railway (Recommended)
-
-1. **Connect your GitHub repository to Railway**
-2. **Set environment variables in Railway dashboard:**
-   - `GROQ_API_KEY` (your Groq API key)
-   - `EMAIL_USER` (your Gmail address)
-   - `EMAIL_PASS` (your Gmail app password)
-3. **Deploy automatically**
-
-### Render
-
-1. **Connect your GitHub repository to Render**
-2. **Set build command:** `npm run build`
-3. **Set start command:** `cd backend && npm start`
-4. **Configure environment variables in Render dashboard**
-
-### Heroku
-
-1. **Connect your GitHub repository to Heroku**
-2. **Create a `Procfile` in the root directory:**
-   ```
-   web: cd backend && npm start
-   ```
-3. **Set environment variables in Heroku dashboard**
-4. **Deploy**
-
-### DigitalOcean App Platform
-
-1. **Connect your GitHub repository to DigitalOcean**
-2. **Choose Node.js environment**
-3. **Set build command:** `npm run build`
-4. **Set start command:** `cd backend && npm start`
-5. **Configure environment variables**
-
 ## API Endpoints
 
 ### Generate Email
